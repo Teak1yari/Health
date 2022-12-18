@@ -4,8 +4,6 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ListOutlinedIcon from '@mui/icons-material/ListOutlined';
 
 const Navbar = () => {
@@ -26,14 +24,6 @@ const Navbar = () => {
           </div>
           <div className="item">
             <FullscreenExitOutlinedIcon className='icon'/>
-          </div>
-          <div className="item">
-            <NotificationsNoneIcon className='icon'/>
-            <div className="counter">1</div>
-          </div>
-          <div className="item">
-            <ChatBubbleOutlineIcon className='icon'/>
-            <div className="counter">2</div>
           </div>
           <div className="item">
             <ListOutlinedIcon className='icon'/>
