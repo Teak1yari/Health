@@ -3,6 +3,7 @@ import Login from "./pages/login/Login";
 import List from "./pages/list/List";
 import Single from "./pages/single/Single";
 import New from "./pages/new/New";
+import { productInputs} from "./formSource";
 import {
   BrowserRouter,
   Routes,
@@ -25,7 +26,7 @@ function App() {
             <Route path="pacients">                                      
               <Route index element={<List/>}/>
               <Route path=":pacientsId" element={<Single/>}/>
-              <Route path="new" element={<New/>}/>
+              <Route path="new" element={<New inputs={productInputs} title="Добавить пациента" />}/>
             </Route>
           </Route>
         </Routes>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 import "./sidebar.scss"
 import DashboardIcon from '@mui/icons-material/Dashboard';  
 import User from '@mui/icons-material/PersonOutlineOutlined';
@@ -12,7 +13,9 @@ const Sidebar = () => {
   return (
     <div className='sidebar'>
         <div className='top'>
+        <Link to="/" style={{ textDecoration: "none" }}>
             <span className="logo">HEALTH</span>
+        </Link>
         </div>
         <hr/>
         <div className='center'>
@@ -23,14 +26,18 @@ const Sidebar = () => {
                   <span>Меню</span>
                 </li>
                 <p className="title">СПИСОК</p>
-                <li>
-                  <User className='icon'/>
-                  <span>Пациенты</span>
-                </li>
-                <li>
-                  <Products className='icon'/>
-                  <span>Создать пациента</span>
-                </li>
+                <Link to="/pacients" style={{ textDecoration: "none" }}>
+                  <li>
+                    <User className='icon'/>
+                    <span>Пациенты</span>
+                  </li>
+                </Link>
+                <Link to="/pacients/new" style={{textDecoration: "none"}}>
+                  <li>
+                    <Products className='icon'/>
+                    <span>Создать пациента</span>
+                  </li>
+                </Link>
                 <p className="title">СЕРВИСЫ</p>
                 <li>
                   <NotificationsNoneOutlinedIcon className='icon'/>
