@@ -43,7 +43,7 @@ function Single() {
 						<div className='rightInputs'>
 							<div className='inputItem'>
 								<span className='inputKey'>Дата посещения: </span>
-								<input type='text' placeholder='...' />
+								<input type='date' placeholder='...' />
 							</div>
 							<div className='inputItem'>
 								<span className='inputKey'>История: </span>

@@ -1,6 +1,4 @@
 import './datatable.scss';
-import { DataGrid } from '@mui/x-data-grid';
-import { userColumns, userRows } from '../../datatables';
 import { Link, useNavigate } from 'react-router-dom';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { fs } from '../../firebase.js';
@@ -36,9 +34,8 @@ const Datatable = () => {
 			<div className='table'>
 				{pacients.map(pac => (
 					<div className='tableElem' key={pac.id}>
-						<div>
-							<span>{pac.name}</span>
-							<span>{pac.secondName}</span>
+						<div className='infoTable'>
+							<span>{pac.name}&nbsp;&nbsp;&nbsp;&nbsp; {pac.secondName}&nbsp;&nbsp;&nbsp;&nbsp; {pac.thirdName} &nbsp;&nbsp;&nbsp;&nbsp;{pac.date}</span>
 						</div>
 						<div className='cellAction'>
 							<div
@@ -53,13 +50,6 @@ const Datatable = () => {
 					</div>
 				))}
 			</div>
-			{/* <DataGrid
-				rows={userRows}
-				columns={userColumns.concat(actionColumn)}
-				pageSize={9}
-				rowsPerPageOptions={[9]}
-				checkboxSelection
-			/> */}
 		</div>
 	);
 };
