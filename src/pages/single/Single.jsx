@@ -25,10 +25,6 @@ function Single() {
                   <span className="itemKey">Номер телефона: </span>
                   <span className="itemValue">+7(914)555-66-77</span>
                 </div>
-                <div className="detailItem">
-                  <span className="itemKey">Адрес проживания: </span>
-                  <span className="itemValue">г.Иркутск ул.Советская 165/2</span>
-                </div>
               </div>
             </div>
           </div>
