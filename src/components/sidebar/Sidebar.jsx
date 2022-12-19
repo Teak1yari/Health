@@ -13,7 +13,7 @@ const Sidebar = () => {
   return (
     <div className='sidebar'>
         <div className='top'>
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/home" style={{ textDecoration: "none" }}>
             <span className="logo">HEALTH</span>
         </Link>
         </div>
