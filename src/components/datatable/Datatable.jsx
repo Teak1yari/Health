@@ -35,7 +35,7 @@ const Datatable = () => {
 				{pacients.map(pac => (
 					<div className='tableElem' key={pac.id}>
 						<div className='infoTable'>
-							<span>{pac.name}&nbsp;&nbsp;&nbsp;&nbsp; {pac.secondName}&nbsp;&nbsp;&nbsp;&nbsp; {pac.thirdName} &nbsp;&nbsp;&nbsp;&nbsp;{pac.date}</span>
+							<span>{pac.name + ' ' + pac.secondName + ' ' + pac.thirdName + ' ' + pac.date}</span>
 						</div>
 						<div className='cellAction'>
 							<div
