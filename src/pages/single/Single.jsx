@@ -4,63 +4,61 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import { useLocation } from 'react-router-dom';
-import { addDoc, collection, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import {
+	collection,
+	doc,
+	getDocs,
+	onSnapshot,
+	setDoc
+} from 'firebase/firestore';
 import { fs } from '../../firebase';
+import { nanoid } from 'nanoid';
 
-function Single() {
+const Single = () => {
 	const location = useLocation();
 	const pacient = location.state.pac;
 
-	const [paciki, setPaciki] = useState([])
-	const [pacikiFiltered, setPacikiFiltered] = useState([])
-	const [pacikiInfo, setPacikiInfo] = useState([])
+	const randUid = nanoid();
 
-	const [dateVisit, setDateVIsit] = useState('')
-	const [userHistory, setUserHistory] = useState('')
-	const [userCourse, setUserCourse] = useState('')
+	const [paciki, setPaciki] = useState([]);
 
-	const fetchUserData = async () => {
-		const q = query(collection(fs, 'pacients'));
-		
-		await getDocs(q).then(snapshot => {
-			const newData = snapshot.docs.map(doc => ({
-				...doc.data()
-			})); 
-			setPaciki(newData);
-			console.log(newData)
+	const [dateVisit, setDateVIsit] = useState('');
+	const [userHistory, setUserHistory] = useState('');
+	const [userCourse, setUserCourse] = useState('');
+
+	const fetchPair = async () => {
+		const unsub = getDocs(collection(fs, 'pacientsInfo'));
+		(await unsub).forEach(doc => {
+			setPaciki({ ...doc.data() });
 		});
+	};
 
-		paciki.forEach(pac => {
-			if(pac.id === pacient.id) {
-				setPacikiFiltered([pac])
-			}
-		})
-	}
-	// console.log(pacikiFiltered)
+	console.log(paciki);
 
 	useEffect(() => {
-		fetchUserData();
-	}, [])
+		fetchPair();
+	}, []);
 
+	const pacRef = doc(fs, 'pacientsInfo', randUid);
 	const writeUserInfo = async () => {
-		const pacRef = doc(fs, 'pacients', pacient.id)
-		await addDoc(pacRef, {
-			pacientInfo: {
-				dateVisit: dateVisit,
-				userHistory: userHistory,
-				userCourse: userCourse
-			}
+		await setDoc(pacRef, {
+			dateVisit: dateVisit,
+			userHistory: userHistory,
+			userCourse: userCourse,
+			id: pacient.id
 		})
-		.then(() => {
-			console.log('good write data')
-			setDateVIsit('')
-			setUserCourse('')
-			setUserHistory('')
-		}).catch((err) => {
-			console.log(err)
-		})
-	}
-
+			.then(() => {
+				console.log('good write data');
+				setDateVIsit('');
+				setUserCourse('');
+				setUserHistory('');
+				fetchPair();
+			})
+			.catch(err => {
+				console.log(err);
+				fetchPair();
+			});
+	};
 
 	return (
 		<div className='single'>
@@ -96,43 +94,60 @@ function Single() {
 						<div className='rightInputs'>
 							<div className='inputItem'>
 								<span className='inputKey'>Дата посещения: </span>
-								<input type='date' placeholder='дата посещения' value={dateVisit} onChange={(e) => setDateVIsit(e.target.value)} />
+								<input
+									type='date'
+									placeholder='дата посещения'
+									value={dateVisit}
+									onChange={e => setDateVIsit(e.target.value)}
+								/>
 							</div>
 							<div className='inputItem'>
 								<span className='inputKey'>История: </span>
-								<input type='text' placeholder='история болезни' value={userHistory} onChange={(e) => setUserHistory(e.target.value)} />
+								<input
+									type='text'
+									placeholder='история болезни'
+									value={userHistory}
+									onChange={e => setUserHistory(e.target.value)}
+								/>
 							</div>
 							<div className='inputItem'>
 								<span className='inputKey'>Курс лечения: </span>
-								<input type='text' placeholder='курс лечения' value={userCourse} onChange={(e) => setUserCourse(e.target.value)} />
+								<input
+									type='text'
+									placeholder='курс лечения'
+									value={userCourse}
+									onChange={e => setUserCourse(e.target.value)}
+								/>
 							</div>
 						</div>
-						<div className='buttonAdd' onClick={writeUserInfo}>Применить</div>
+						<div className='buttonAdd' onClick={writeUserInfo}>
+							Применить
+						</div>
 					</div>
 				</div>
-				
+
 				<div className='bottom'>
 					<h1 className='title'>ИСТОРИЯ ПАЦИЕНТА</h1>
-					{pacikiFiltered.map((pacik, key) => (
+					{/* {paciki.map((pacik, key) => (
 						<div key={key} className='bottomInfo'>
-						<div className='date'>
-							<h1 className='datePacient'>Дата посещения:</h1>
-							<span className='historyInfo'>{pacik.dateVisit}</span>
+							<div className='date'>
+								<h1 className='datePacient'>Дата посещения:</h1>
+								<span className='historyInfo'>{pacik.dateVisit}</span>
+							</div>
+							<div className='date'>
+								<h1 className='datePacient'>История: </h1>
+								<span className='historyInfo'>{pacik.userHistory}</span>
+							</div>
+							<div className='date'>
+								<h1 className='datePacient'>Курс: </h1>
+								<span className='historyInfo'>{pacik.userCourse}</span>
+							</div>
 						</div>
-						<div className='date'>
-							<h1 className='datePacient'>История: </h1>
-							<span className='historyInfo'>{pacik.userHistory}</span>
-						</div>
-						<div className='date'>
-							<h1 className='datePacient'>Курс: </h1>
-							<span className='historyInfo'>{pacik.userCourse}</span>
-						</div>
-					</div>
-					))}
+					))} */}
 				</div>
 			</div>
 		</div>
 	);
-}
+};
 
 export default Single;
