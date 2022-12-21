@@ -9,7 +9,9 @@ import {
 	doc,
 	getDocs,
 	onSnapshot,
-	setDoc
+	query,
+	setDoc,
+	where
 } from 'firebase/firestore';
 import { fs } from '../../firebase';
 import { nanoid } from 'nanoid';
@@ -19,45 +21,50 @@ const Single = () => {
 	const pacient = location.state.pac;
 
 	const randUid = nanoid();
+	const pacRef = doc(fs, 'pacientsInfo', randUid);
+	const delay = 1;
 
 	const [paciki, setPaciki] = useState([]);
+	const [pacikiFiltered, setPacikiFiltered] = useState([]);
 
 	const [dateVisit, setDateVIsit] = useState('');
 	const [userHistory, setUserHistory] = useState('');
 	const [userCourse, setUserCourse] = useState('');
 
-	const fetchPair = async () => {
-		const unsub = getDocs(collection(fs, 'pacientsInfo'));
-		(await unsub).forEach(doc => {
-			setPaciki({ ...doc.data() });
+	const q = query(collection(fs, 'pacientsInfo'));
+
+	onSnapshot(q, snapshot => {
+		const newData = snapshot.docs.map(doc => ({
+			...doc.data()
+		}));
+		setPaciki(newData);
+		const res = paciki.filter(pacik => {
+			return pacik.id === pacient.id;
 		});
-	};
+		setPacikiFiltered(res);
+	});
 
-	console.log(paciki);
-
-	useEffect(() => {
-		fetchPair();
-	}, []);
-
-	const pacRef = doc(fs, 'pacientsInfo', randUid);
 	const writeUserInfo = async () => {
-		await setDoc(pacRef, {
-			dateVisit: dateVisit,
-			userHistory: userHistory,
-			userCourse: userCourse,
-			id: pacient.id
-		})
-			.then(() => {
-				console.log('good write data');
-				setDateVIsit('');
-				setUserCourse('');
-				setUserHistory('');
-				fetchPair();
+		if (dateVisit !== '' && userCourse !== '' && userHistory !== '') {
+			await setDoc(pacRef, {
+				dateVisit: dateVisit,
+				userHistory: userHistory,
+				userCourse: userCourse,
+				id: pacient.id,
+				randId: randUid
 			})
-			.catch(err => {
-				console.log(err);
-				fetchPair();
-			});
+				.then(() => {
+					console.log('good write data');
+					setDateVIsit('');
+					setUserCourse('');
+					setUserHistory('');
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		} else {
+			alert('Заполнены не все поля');
+		}
 	};
 
 	return (
@@ -128,7 +135,7 @@ const Single = () => {
 
 				<div className='bottom'>
 					<h1 className='title'>ИСТОРИЯ ПАЦИЕНТА</h1>
-					{/* {paciki.map((pacik, key) => (
+					{pacikiFiltered.map((pacik, key) => (
 						<div key={key} className='bottomInfo'>
 							<div className='date'>
 								<h1 className='datePacient'>Дата посещения:</h1>
@@ -143,7 +150,7 @@ const Single = () => {
 								<span className='historyInfo'>{pacik.userCourse}</span>
 							</div>
 						</div>
-					))} */}
+					))}
 				</div>
 			</div>
 		</div>
